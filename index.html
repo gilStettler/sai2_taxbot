@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bern Chatbot</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="header-main">
+        <h1>Bern Chatbot</h1>
+        <p class="subtitle">
+          Beratungs-Chatbot (Demo) – nicht offiziell, aber visuell an den Kanton Bern angelehnt.
+        </p>
+      </div>
+      <div class="header-actions">
+        <div class="api-key-container">
+          <label for="apiKeyInput">OpenAI API Key</label>
+          <div class="api-key-row">
+            <input
+              id="apiKeyInput"
+              type="password"
+              placeholder="sk-..."
+            />
+            <button id="saveApiKeyBtn" type="button">Speichern</button>
+          </div>
+          <span id="apiKeyStatus" class="status"></span>
+        </div>
+        <button id="clearChatBtn" type="button" class="ghost-button">
+          Verlauf löschen
+        </button>
+      </div>
+    </header>
+
+    <main class="chat-container">
+      <div id="chatWindow" class="chat-window">
+        <!-- Nachrichten werden hier gerendert -->
+      </div>
+    </main>
+
+    <footer class="input-area">
+      <form id="chatForm">
+        <input
+          id="userInput"
+          type="text"
+          placeholder="Schreibe eine Nachricht…"
+          autocomplete="off"
+          required
+        />
+        <button type="submit">Senden</button>
+      </form>
+    </footer>
+  </div>
+
+  <!-- Markdown-Renderer (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Dein App-Code -->
+  <script src="app.js"></script>
+</body>
+</html>
