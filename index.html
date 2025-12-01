@@ -28,53 +28,56 @@
       </header>
 
       <main class="chat-container">
-        <!-- Hinweistext / Banner -->
-        <div class="info-banner">
-          <p>
-            <strong>Hinweis:</strong> Dieser Chatbot basiert auf künstlicher
-            Intelligenz und kann unvollständige oder fehlerhafte Aussagen
-            generieren. Wir übernehmen keine Verantwortung für die automatisch
-            erzeugten Inhalte und empfehlen, die Antworten stets kritisch zu
-            prüfen und nicht unreflektiert zu übernehmen.
-          </p>
 
-          <p>
-            Für optimale Ergebnisse bitten wir Sie, Ihre Fragen möglichst
-            <strong>klar, detailliert und konkret</strong> zu formulieren.
-          </p>
-
-          <p>
-            Die Antworten des Chatbots basieren auf folgenden Dokumenten:<br />
-            •
-            <a
-              href="https://www.fedlex.admin.ch/eli/cc/1991/1184_1184_1184/de"
-              target="_blank"
-              >Bundesgesetz über die direkte Bundessteuer (DBG) 642.11</a
-            ><br />
-            •
-            <a
-              href="https://www.belex.sites.be.ch/app/de/texts_of_law/661.11"
-              target="_blank"
-              >Steuergesetz Kanton Bern (StG) BSG 661.11</a
-            ><br />
-            •
-            <a
-              href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjl4JCg65yRAxUA0wIHHRKpCPAQFnoECB0QAQ&url=https%3A%2F%2Fwww.sv.fin.be.ch%2Fcontent%2Fdam%2Fsv_fin%2Fdokumente%2Fde%2Fbelogin_leitfaden_online_de.pdf&usg=AOvVaw0Y-lDfMQnSbaIkULYLWDr_&opi=89978449"
-              target="_blank"
-              >Leitfaden Online-Ausfüllen der Steuererklärung für Privatpersonen
-              (natürliche Personen)</a
-            ><br />
-            •
-            <a
-              href="https://www.wegleitung.sv.fin.be.ch/content/dam/sv_fin/dokumente/de/wegleitungen/2024/wl_natuerliche-personen_2024_de.pdf"
-              target="_blank"
-              >Wegleitung Kanton Bern für natürliche Personen</a
-            >
-          </p>
-        </div>
-
+        <!-- GANZER CHAT (scrollbar) -->
         <div id="chatWindow" class="chat-window">
-          <!-- Nachrichten -->
+
+          <!-- Hinweis ist jetzt Teil des scrollbaren Bereichs -->
+          <div class="info-banner">
+            <p>
+              <strong>Hinweis:</strong> Dieser Chatbot basiert auf künstlicher
+              Intelligenz und kann unvollständige oder fehlerhafte Aussagen
+              generieren. Wir übernehmen keine Verantwortung für die automatisch
+              erzeugten Inhalte und empfehlen, die Antworten stets kritisch zu
+              prüfen und nicht unreflektiert zu übernehmen.
+            </p>
+
+            <p>
+              Für optimale Ergebnisse bitten wir Sie, Ihre Fragen möglichst
+              <strong>klar, detailliert und konkret</strong> zu formulieren.
+            </p>
+
+            <p>
+              Die Antworten des Chatbots basieren auf folgenden Dokumenten:<br />
+              •
+              <a
+                href="https://www.fedlex.admin.ch/eli/cc/1991/1184_1184_1184/de"
+                target="_blank"
+                >Bundesgesetz über die direkte Bundessteuer (DBG) 642.11</a
+              ><br />
+              •
+              <a
+                href="https://www.belex.sites.be.ch/app/de/texts_of_law/661.11"
+                target="_blank"
+                >Steuergesetz Kanton Bern (StG) BSG 661.11</a
+              ><br />
+              •
+              <a
+                href="https://www.sv.fin.be.ch/content/dam/sv_fin/dokumente/de/belogin_leitfaden_online_de.pdf"
+                target="_blank"
+                >Leitfaden Online-Ausfüllen der Steuererklärung</a
+              ><br />
+              •
+              <a
+                href="https://www.wegleitung.sv.fin.be.ch/content/dam/sv_fin/dokumente/de/wegleitungen/2024/wl_natuerliche-personen_2024_de.pdf"
+                target="_blank"
+                >Wegleitung Kanton Bern für natürliche Personen</a
+              >
+            </p>
+          </div>
+
+          <!-- NUR die Nachrichten -->
+          <div id="chatMessages" class="chat-messages"></div>
         </div>
       </main>
 
@@ -92,9 +95,8 @@
       </footer>
     </div>
 
-    <!-- Markdown-Renderer (CDN) -->
+    <!-- Markdown-Renderer -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Dein App-Code -->
     <script src="app.js"></script>
   </body>
 </html>

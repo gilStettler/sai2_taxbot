@@ -177,20 +177,27 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* wichtig, damit die Scrollbox unabhängig ist */
+  overflow: hidden;
 }
 
+/* Scrollcontainer: Banner + Nachrichten */
 .chat-window {
-  flex: 1;          /* nimmt restlichen Platz ein */
-  min-height: 0;     /* ERLAUBT scrollen innerhalb eines flex-Parents */
+  flex: 1;
+  min-height: 0;           /* wichtig für Scrollen im Flex-Layout */
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Nur Nachrichten, ohne Banner */
+.chat-messages {
   padding: 16px 18px 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Nachrichten */
+/* Hinweis-Banner im Chat, oben */
 .info-banner {
   text-align: center;
   padding: 14px 18px;
@@ -214,7 +221,7 @@ body {
   color: #000;
 }
 
-
+/* Nachrichten */
 
 .message {
   max-width: 80%;
@@ -300,7 +307,7 @@ body {
   overflow-x: auto;
 }
 
-/* Links */
+/* Links im Assistant-Text */
 .message.assistant a {
   color: var(--bern-red);
   text-decoration: underline;

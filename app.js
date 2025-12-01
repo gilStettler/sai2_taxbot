@@ -5,15 +5,16 @@ const VECTOR_STORE_ID = "vs_69289678d9ac81919df96098adb8ec9e";
 
 // ==== STATE ====
 let apiKey = null;
-
-// Chat-Verlauf: [{ role: "user" | "assistant", content: "..." }, ...]
 let conversation = [];
 
 // ==== DOM ELEMENTS ====
 const apiKeyInput = document.getElementById("apiKeyInput");
 const saveApiKeyBtn = document.getElementById("saveApiKeyBtn");
 const apiKeyStatus = document.getElementById("apiKeyStatus");
-const chatWindow = document.getElementById("chatWindow");
+
+const chatWindow = document.getElementById("chatWindow"); // scrollcontainer
+const chatMessages = document.getElementById("chatMessages"); // nur Nachrichten
+
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const clearChatBtn = document.getElementById("clearChatBtn");
@@ -29,7 +30,6 @@ const clearChatBtn = document.getElementById("clearChatBtn");
     apiKeyStatus.textContent = "Kein Key gespeichert";
   }
 
-  // Optionale Komfort-Settings für marked
   if (window.marked) {
     marked.setOptions({
       breaks: true,
@@ -41,15 +41,14 @@ const clearChatBtn = document.getElementById("clearChatBtn");
   renderConversation();
 })();
 
-// ==== HELFER ====
-
+// ==== RENDER ====
 function addMessage(role, content) {
   conversation.push({ role, content });
   renderConversation();
 }
 
 function renderConversation() {
-  chatWindow.innerHTML = "";
+  chatMessages.innerHTML = ""; // WICHTIG: Hinweis bleibt erhalten
 
   conversation.forEach((msg) => {
     const msgDiv = document.createElement("div");
@@ -62,7 +61,6 @@ function renderConversation() {
     const text = document.createElement("div");
 
     if (msg.role === "assistant" && window.marked) {
-      // Markdown → HTML rendern
       text.innerHTML = marked.parse(msg.content || "");
     } else {
       text.textContent = msg.content;
@@ -70,24 +68,21 @@ function renderConversation() {
 
     msgDiv.appendChild(meta);
     msgDiv.appendChild(text);
-    chatWindow.appendChild(msgDiv);
+    chatMessages.appendChild(msgDiv);
   });
 
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-/**
- * Baut aus der kompletten Unterhaltung + neuer User-Nachricht
- * einen großen `question`-String für dein gespeichertes Prompt.
- */
+// ==== BUILD CONTEXT ====
 function buildQuestionFromConversation(nextUserMessage) {
-  const tempConversation = [...conversation];
+  const temp = [...conversation];
 
   if (nextUserMessage) {
-    tempConversation.push({ role: "user", content: nextUserMessage });
+    temp.push({ role: "user", content: nextUserMessage });
   }
 
-  const lines = tempConversation.map((m) => {
+  const lines = temp.map((m) => {
     const label = m.role === "user" ? "User" : "Assistant";
     return `${label}: ${m.content}`;
   });
@@ -99,10 +94,7 @@ function buildQuestionFromConversation(nextUserMessage) {
   );
 }
 
-/**
- * Robustes Auslesen des Textes aus der Responses-API Antwort.
- * (Der Text kommt idealerweise schon als Markdown.)
- */
+// ==== PARSE OPENAI RESPONSE ====
 function extractTextFromResponse(data) {
   try {
     if (typeof data.output_text === "string" && data.output_text.trim() !== "") {
@@ -114,7 +106,7 @@ function extractTextFromResponse(data) {
         if (!item || !Array.isArray(item.content)) continue;
         for (const part of item.content) {
           if (part.type === "output_text" && part.text?.value) {
-            return String(part.text.value).trim();
+            return part.text.value.trim();
           }
           if (typeof part.text === "string") {
             return part.text.trim();
@@ -123,22 +115,15 @@ function extractTextFromResponse(data) {
       }
     }
 
-    return (
-      "Ich habe eine Antwort erhalten, konnte aber keinen Text finden:\n" +
-      JSON.stringify(data, null, 2)
-    );
+    return "Konnte keine Antwort auslesen:\n" + JSON.stringify(data, null, 2);
   } catch (e) {
-    return (
-      "Fehler beim Lesen der Antwort:\n" +
-      (e.message || String(e)) +
-      "\n\nRohdaten:\n" +
-      JSON.stringify(data, null, 2)
-    );
+    return "Fehler:\n" + e.message;
   }
 }
 
 // ==== EVENTS ====
 
+// API KEY SPEICHERN
 saveApiKeyBtn.addEventListener("click", () => {
   const value = apiKeyInput.value.trim();
   if (!value) {
@@ -154,38 +139,36 @@ saveApiKeyBtn.addEventListener("click", () => {
   apiKeyStatus.style.color = "#16a34a";
 });
 
-// "Verlauf löschen" – Chat + Kontext zurücksetzen
+// CLEAR CHAT
 clearChatBtn.addEventListener("click", () => {
   if (!conversation.length) return;
 
-  const confirmClear = window.confirm(
-    "Möchtest du den gesamten Chat-Verlauf wirklich löschen? Der Chatbot verliert damit den bisherigen Kontext."
+  const ok = window.confirm(
+    "Möchten Sie den gesamten Chat-Verlauf löschen?"
   );
-  if (!confirmClear) return;
+  if (!ok) return;
 
   conversation = [];
   renderConversation();
 });
 
+// SENDEN
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = userInput.value.trim();
   if (!text) return;
 
   if (!apiKey) {
-    alert("Bitte zuerst deinen OpenAI API Key setzen.");
+    alert("Bitte zuerst Ihren API Key speichern.");
     return;
   }
 
-  // Frage mit Kontext (inkl. aktueller User-Nachricht) aufbauen
   const question = buildQuestionFromConversation(text);
 
-  // User-Nachricht im UI anzeigen
   addMessage("user", text);
   userInput.value = "";
   userInput.focus();
 
-  // Platzhalter-Nachricht für "Assistant denkt nach..."
   const typingIndex = conversation.length;
   conversation.push({ role: "assistant", content: "Denke nach…" });
   renderConversation();
@@ -209,17 +192,10 @@ chatForm.addEventListener("submit", async (e) => {
           }
         },
         input: [],
-        text: {
-          format: {
-            type: "text"
-          }
-        },
+        text: { format: { type: "text" } },
         reasoning: {},
         tools: [
-          {
-            type: "file_search",
-            vector_store_ids: [VECTOR_STORE_ID]
-          }
+          { type: "file_search", vector_store_ids: [VECTOR_STORE_ID] }
         ],
         max_output_tokens: 2048,
         store: true
@@ -228,24 +204,21 @@ chatForm.addEventListener("submit", async (e) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
+      throw new Error(errorText);
     }
 
     const data = await response.json();
-    console.log("OpenAI raw response:", data);
-
     const assistantText = extractTextFromResponse(data);
 
-    // Platzhalter durch echte Antwort ersetzen
-    conversation[typingIndex] = { role: "assistant", content: assistantText };
-    renderConversation();
-  } catch (err) {
-    console.error(err);
     conversation[typingIndex] = {
       role: "assistant",
-      content:
-        "Fehler beim Aufruf der OpenAI API:\n" +
-        (err.message || String(err))
+      content: assistantText
+    };
+    renderConversation();
+  } catch (err) {
+    conversation[typingIndex] = {
+      role: "assistant",
+      content: "Fehler:\n" + err.message
     };
     renderConversation();
   } finally {
