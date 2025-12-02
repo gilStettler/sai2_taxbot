@@ -1,7 +1,8 @@
 // ==== CONFIG: IDs aus deinem Python-Script ====
+// Passe diese Werte bei Bedarf an dein Setup an
 const PROMPT_ID = "pmpt_692896af992881959106cbd3c386f89409af548b48c6b541";
-const PROMPT_VERSION = "32";
-const VECTOR_STORE_ID = "vs_69289678d9ac81919df96098adb8ec9e";
+const PROMPT_VERSION = "40";
+const VECTOR_STORE_ID = "vs_692f4c4e46d48191b1816c2f7efa50b7";
 
 // ==== STATE ====
 let apiKey = null;
@@ -26,8 +27,10 @@ const clearChatBtn = document.getElementById("clearChatBtn");
     apiKey = storedKey;
     apiKeyInput.value = "********";
     apiKeyStatus.textContent = "Key geladen";
+    apiKeyStatus.style.color = "#16a34a";
   } else {
     apiKeyStatus.textContent = "Kein Key gespeichert";
+    apiKeyStatus.style.color = "#cc5500";
   }
 
   if (window.marked) {
@@ -48,7 +51,7 @@ function addMessage(role, content) {
 }
 
 function renderConversation() {
-  chatMessages.innerHTML = ""; // WICHTIG: Hinweis bleibt erhalten
+  chatMessages.innerHTML = "";
 
   conversation.forEach((msg) => {
     const msgDiv = document.createElement("div");
@@ -75,35 +78,35 @@ function renderConversation() {
 }
 
 // ==== BUILD CONTEXT ====
+
+// 1) Voller Chatverlauf als Memory (wie früher)
+function buildHistory() {
+  return conversation
+    .map((m) => {
+      const label = m.role === "user" ? "User" : "Assistant";
+      return `${label}: ${m.content}`;
+    })
+    .join("\n");
+}
+
+// 2) Nur die aktuelle User-Frage für die eigentliche Beantwortung / File Search
 function buildQuestionFromConversation(nextUserMessage) {
-  const temp = [...conversation];
-
-  if (nextUserMessage) {
-    temp.push({ role: "user", content: nextUserMessage });
-  }
-
-  const lines = temp.map((m) => {
-    const label = m.role === "user" ? "User" : "Assistant";
-    return `${label}: ${m.content}`;
-  });
-
-  return (
-    "This is a conversation between a user and an assistant.\n" +
-    "Use the full chat history below to answer the last user message.\n\n" +
-    lines.join("\n")
-  );
+  return nextUserMessage || "";
 }
 
 // ==== PARSE OPENAI RESPONSE ====
 function extractTextFromResponse(data) {
   try {
+    // Einfachster Fall: convenience-Feld output_text
     if (typeof data.output_text === "string" && data.output_text.trim() !== "") {
       return data.output_text.trim();
     }
 
+    // Fallback: aus data.output die Textteile ziehen
     if (Array.isArray(data.output)) {
       for (const item of data.output) {
         if (!item || !Array.isArray(item.content)) continue;
+
         for (const part of item.content) {
           if (part.type === "output_text" && part.text?.value) {
             return part.text.value.trim();
@@ -117,7 +120,7 @@ function extractTextFromResponse(data) {
 
     return "Konnte keine Antwort auslesen:\n" + JSON.stringify(data, null, 2);
   } catch (e) {
-    return "Fehler:\n" + e.message;
+    return "Fehler beim Parsen der Antwort:\n" + e.message;
   }
 }
 
@@ -143,9 +146,7 @@ saveApiKeyBtn.addEventListener("click", () => {
 clearChatBtn.addEventListener("click", () => {
   if (!conversation.length) return;
 
-  const ok = window.confirm(
-    "Möchten Sie den gesamten Chat-Verlauf löschen?"
-  );
+  const ok = window.confirm("Möchten Sie den gesamten Chat-Verlauf löschen?");
   if (!ok) return;
 
   conversation = [];
@@ -163,6 +164,9 @@ chatForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Verlauf OHNE aktuelle Nachricht
+  const history = buildHistory();
+  // aktuelle Nachricht
   const question = buildQuestionFromConversation(text);
 
   addMessage("user", text);
@@ -188,6 +192,7 @@ chatForm.addEventListener("submit", async (e) => {
           id: PROMPT_ID,
           version: PROMPT_VERSION,
           variables: {
+            history: history,
             question: question
           }
         },
@@ -195,8 +200,15 @@ chatForm.addEventListener("submit", async (e) => {
         text: { format: { type: "text" } },
         reasoning: {},
         tools: [
-          { type: "file_search", vector_store_ids: [VECTOR_STORE_ID] }
+          {
+            type: "file_search",
+            vector_store_ids: [VECTOR_STORE_ID]
+          }
         ],
+        
+        tool_choice: "required",
+
+        temperature: 0.8,
         max_output_tokens: 2048,
         store: true
       })
