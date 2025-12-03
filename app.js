@@ -1,5 +1,4 @@
 // ==== CONFIG: IDs aus deinem Python-Script ====
-// Passe diese Werte bei Bedarf an dein Setup an
 const PROMPT_ID = "pmpt_692896af992881959106cbd3c386f89409af548b48c6b541";
 const PROMPT_VERSION = "40";
 const VECTOR_STORE_ID = "vs_692f4c4e46d48191b1816c2f7efa50b7";
@@ -79,7 +78,7 @@ function renderConversation() {
 
 // ==== BUILD CONTEXT ====
 
-// 1) Voller Chatverlauf als Memory (wie früher)
+// 1) Voller Chatverlauf als Memory
 function buildHistory() {
   return conversation
     .map((m) => {
@@ -89,7 +88,7 @@ function buildHistory() {
     .join("\n");
 }
 
-// 2) Nur die aktuelle User-Frage für die eigentliche Beantwortung / File Search
+// 2) Nur die aktuelle User-Frage für die eigentliche File Search
 function buildQuestionFromConversation(nextUserMessage) {
   return nextUserMessage || "";
 }
@@ -97,7 +96,7 @@ function buildQuestionFromConversation(nextUserMessage) {
 // ==== PARSE OPENAI RESPONSE ====
 function extractTextFromResponse(data) {
   try {
-    // Einfachster Fall: convenience-Feld output_text
+    // Direktes output_text Feld prüfen
     if (typeof data.output_text === "string" && data.output_text.trim() !== "") {
       return data.output_text.trim();
     }

@@ -44,8 +44,6 @@ body {
   overflow: hidden;
 }
 
-/* HEADER */
-
 .app-header {
   padding: 14px 18px 12px;
   border-bottom: 1px solid var(--border-subtle);
@@ -146,8 +144,6 @@ body {
   color: #16a34a;
 }
 
-/* Ghost Button für "Clear" */
-
 .ghost-button {
   padding: 7px 12px;
   border-radius: var(--radius-pill);
@@ -171,7 +167,6 @@ body {
   background: #f9fafb;
 }
 
-/* CHAT-BEREICH */
 
 .chat-container {
   flex: 1;
@@ -180,16 +175,15 @@ body {
   overflow: hidden;
 }
 
-/* Scrollcontainer: Banner + Nachrichten */
+
 .chat-window {
   flex: 1;
-  min-height: 0;           /* wichtig für Scrollen im Flex-Layout */
+  min-height: 0;           
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* Nur Nachrichten, ohne Banner */
 .chat-messages {
   padding: 16px 18px 18px;
   display: flex;
@@ -197,11 +191,10 @@ body {
   gap: 10px;
 }
 
-/* Hinweis-Banner im Chat, oben */
 .info-banner {
   text-align: center;
   padding: 14px 18px;
-  background: #f3f4f6; /* Dezentes Grau */
+  background: #f3f4f6; 
   border-bottom: 1px solid #d1d5db;
   color: #374151;
   font-size: 14px;
@@ -220,8 +213,6 @@ body {
 .info-banner a:hover {
   color: #000;
 }
-
-/* Nachrichten */
 
 .message {
   max-width: 80%;
@@ -254,14 +245,11 @@ body {
   margin-bottom: 4px;
 }
 
-/* Markdown-Styling (nur Assistant) */
-
 .message.assistant > div:last-child {
   white-space: normal;
   line-height: 1.6;
 }
 
-/* Überschriften */
 .message.assistant h1,
 .message.assistant h2,
 .message.assistant h3 {
@@ -271,12 +259,11 @@ body {
   color: var(--bern-black);
 }
 
-/* Absätze */
 .message.assistant p {
   margin: 0 0 6px;
 }
 
-/* Listen */
+
 .message.assistant ul,
 .message.assistant ol {
   margin: 4px 0 6px 18px;
@@ -287,7 +274,7 @@ body {
   margin-bottom: 2px;
 }
 
-/* Inline-Code */
+
 .message.assistant code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
@@ -297,7 +284,6 @@ body {
   background: #f3f4f6;
 }
 
-/* Codeblöcke */
 .message.assistant pre {
   margin: 6px 0;
   padding: 8px 10px;
@@ -307,13 +293,12 @@ body {
   overflow-x: auto;
 }
 
-/* Links im Assistant-Text */
+
 .message.assistant a {
   color: var(--bern-red);
   text-decoration: underline;
 }
 
-/* INPUT-FOOTER */
 
 .input-area {
   border-top: 1px solid var(--border-subtle);
@@ -366,8 +351,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Scrollbar minimal anpassen */
-
 .chat-window::-webkit-scrollbar {
   width: 6px;
 }
@@ -381,7 +364,6 @@ body {
   border-radius: 999px;
 }
 
-/* Responsive */
 
 @media (max-width: 720px) {
   body {
