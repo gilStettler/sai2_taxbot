@@ -25,6 +25,8 @@ To delete your chat and start a new one, click here:
 
 <img width="185" height="60" alt="image" src="https://github.com/user-attachments/assets/127e655f-2963-47d4-ae08-b6d4a2eb566a" />
 
+---
+
 ## 🤯 Troubleshooting
 The following problems were discovered while testing our chatbot:
 - Using the WLAN "BFH_brue" may lead to not receiving any responses. We therefore suggest using another connection.
