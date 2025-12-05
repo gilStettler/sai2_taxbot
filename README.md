@@ -12,7 +12,7 @@ No installation needed! Our Chatbot is hosted using github pages and accessible 
 
 https://gilstettler.github.io/sai2_taxbot/ 
 
-If you want to run it localy, just clone the repository and run any static server:
+If you want to run it localy, just clone the repository and run any static server.
 
 ---
 
