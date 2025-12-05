@@ -1,6 +1,6 @@
 // ==== CONFIG: IDs aus deinem Python-Script ====
 const PROMPT_ID = "pmpt_692896af992881959106cbd3c386f89409af548b48c6b541";
-const PROMPT_VERSION = "41";
+const PROMPT_VERSION = "42";
 const VECTOR_STORE_ID = "vs_692f4c4e46d48191b1816c2f7efa50b7";
 
 // ==== STATE ====
