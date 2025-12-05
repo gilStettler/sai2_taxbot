@@ -1,6 +1,6 @@
 # TaxBot Bern – AI-Powered Tax Assistant
 
-**TaxBot Bern** is a lightweight, browser-based AI chatbot designed to help users based in the canton of Bern, Switzerland, fill out their tax declaration.
+**TaxBot Bern** is a lightweight, browser-based AI chatbot using the openAI model gpt-4.1. TaxBot Bern is designed to help users based in the canton of Bern, Switzerland, fill out their tax declaration.
 It uses the **OpenAI Responses API** and a **vector store** to answer questions based on official tax documents.
 
 This project was created as part of the Innovation through Generative AI (SAI2) module at Bern University of Applied Sciences.
