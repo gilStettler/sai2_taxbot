@@ -8,7 +8,7 @@ This project was created as part of the Innovation through Generative AI (SAI2) 
 ---
 
 ## 📦 Installation
-No installation needed! Our Chatbot is hosted using github pages and accessible using the following link:
+No installation needed! Our Chatbot is deployed with github pages and accessible using the following link:
 
 https://gilstettler.github.io/sai2_taxbot/ 
 
