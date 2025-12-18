@@ -1,4 +1,4 @@
-// ==== CONFIG: IDs aus deinem Python-Script ====
+// ==== CONFIG ====
 const PROMPT_ID = "pmpt_692896af992881959106cbd3c386f89409af548b48c6b541";
 const PROMPT_VERSION = "42";
 const VECTOR_STORE_ID = "vs_692f4c4e46d48191b1816c2f7efa50b7";
@@ -12,8 +12,8 @@ const apiKeyInput = document.getElementById("apiKeyInput");
 const saveApiKeyBtn = document.getElementById("saveApiKeyBtn");
 const apiKeyStatus = document.getElementById("apiKeyStatus");
 
-const chatWindow = document.getElementById("chatWindow"); // scrollcontainer
-const chatMessages = document.getElementById("chatMessages"); // nur Nachrichten
+const chatWindow = document.getElementById("chatWindow"); 
+const chatMessages = document.getElementById("chatMessages"); 
 
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
@@ -88,7 +88,7 @@ function buildHistory() {
     .join("\n");
 }
 
-// 2) Nur die aktuelle User-Frage für die eigentliche File Search
+// 2) Nur die aktuelle User-Frage
 function buildQuestionFromConversation(nextUserMessage) {
   return nextUserMessage || "";
 }
